@@ -1,10 +1,7 @@
-import mongoose from 'mongoose';
-
-const userSchema = new mongoose.Schema({
-  pi_uid: { type: String, unique: true },
+const mongoose = require('mongoose')
+const UserSchema = new mongoose.Schema({
+  uid: { type: String, required: true, unique: true },
   username: String,
-  flagged: { type: Boolean, default: false },
-  lastLogin: Date
-});
-
-export default mongoose.model('User', userSchema);
+  createdAt: { type: Date, default: Date.now }
+})
+module.exports = mongoose.model('User', UserSchema)
