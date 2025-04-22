@@ -36,3 +36,10 @@ app.use('/api/fraud', fraudRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server runnin on ${PORT}`));
+require('dotenv').config();
+const express = require('express');
+const app = express();
+app.use(express.json());
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+app.listen(3000, () => console.log('Backend running on port 3000'));
