@@ -13,3 +13,11 @@ const router = createRouter({
 });
 
 export default router;
+router.beforeEach((to, from, next) => {
+  const user = JSON.parse(localStorage.getItem('pi_user'));
+  if (to.path === '/dashboard' && !user) {
+    next('/');
+  } else {
+    next();
+  }
+});
