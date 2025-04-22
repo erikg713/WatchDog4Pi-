@@ -1,3 +1,14 @@
+import Pi from 'pi-sdk';
+
+export function authenticatePi(onSuccess, onError) {
+  Pi.authenticate(['username', 'payments'], (user) => {
+    onSuccess(user);
+  }, (error) => {
+    onError(error);
+  });
+}
+
+
 export async function loginWithPi() {
   const scopes = ['username', 'payments'];
   const onIncompletePaymentFound = (payment) => {
