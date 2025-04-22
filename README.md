@@ -89,3 +89,11 @@ npm init -y
 npm install express mongoose dotenv
 npm install nodemon --save-dev
 --
+
+
+npm init vue@latest
+
+cd piguard-frontend
+npm install
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
