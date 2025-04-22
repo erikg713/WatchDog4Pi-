@@ -83,3 +83,9 @@ wordlists/                  # Custom scam keywords, fake domains, usernames, etc
 └── workflows/
     └── node.yml            # Auto deploy/test
 --
+## Backend Dependencies ##
+mkdir backend && cd backend
+npm init -y
+npm install express mongoose dotenv
+npm install nodemon --save-dev
+--
