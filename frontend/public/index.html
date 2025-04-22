@@ -1,2 +1,6 @@
 
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+const user = JSON.parse(localStorage.getItem('pi_user'));
+const res = await fetch('http://localhost:5000/api/fraud/check', {
+  headers: { 'x-pi-uid': user?.uid }
+});
