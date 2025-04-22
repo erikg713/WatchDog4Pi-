@@ -11,3 +11,17 @@ function login() {
   loginWithPi();
 }
 </script>
+<template>
+  <button @click="loginWithPi">Login with Pi</button>
+</template>
+
+<script setup>
+import { authenticatePi } from '@/utils/pi.js';
+
+function loginWithPi() {
+  authenticatePi(
+    user => alert('Logged in as ' + user.username),
+    err => alert('Auth failed: ' + err.message)
+  );
+}
+</script>
