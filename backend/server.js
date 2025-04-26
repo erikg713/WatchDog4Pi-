@@ -7,7 +7,20 @@ import fraudRoutes from './routes/fraudRoutes.js';
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config.js';
+import express from 'express';
+import cors from 'cors';
+import fraudRoutes from './routes/fraud.js';
+import adminRoutes from './routes/admin.js';
 
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.use(fraudRoutes);
+app.use(adminRoutes);
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 import authRoutes from './routes/authRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
 import fraudRoutes from './routes/fraudRoutes.js';
