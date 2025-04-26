@@ -1,6 +1,19 @@
 import express from 'express';
 import { recordTransaction } from '../controllers/transactionController.js';
+import Transaction from './models/Transaction.js';
 
+// Create a new transaction example
+const newTransaction = new Transaction({
+  user: userId, // Pass the user’s ObjectId
+  amount: 100.50,
+  paymentId: 'payment123',
+  txid: 'txid123',
+  status: 'completed',
+  vendor: 'ShopXYZ',
+});
+
+// Save it to the database
+await newTransaction.save();
 const router = express.Router();
 
 router.post('/', recordTransaction); // POST /api/transactions
