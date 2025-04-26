@@ -1,6 +1,20 @@
-
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-const user = JSON.parse(localStorage.getItem('pi_user'));
-const res = await fetch('http://localhost:5000/api/fraud/check', {
-  headers: { 'x-pi-uid': user?.uid }
-});
+<script>
+  (async () => {
+    const user = JSON.parse(localStorage.getItem('pi_user'));
+    if (!user?.uid) {
+      console.error('Pi user not found in localStorage');
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:5000/api/fraud/check', {
+        headers: { 'x-pi-uid': user.uid }
+      });
+      const data = await res.json();
+      console.log('Fraud check result:', data);
+    } catch (error) {
+      console.error('Error during fraud check:', error);
+    }
+  })();
+</script>
