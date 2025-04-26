@@ -6,7 +6,16 @@
       console.error('Pi user not found in localStorage');
       return;
     }
+const user = JSON.parse(localStorage.getItem('pi_user'));
+const accessToken = user?.accessToken;
 
+const res = await fetch('http://localhost:5000/api/fraud/check', {
+  method: 'GET',
+  headers: {
+    'x-pi-uid': user?.uid,
+    'Authorization': `Bearer ${accessToken}`
+  }
+});
     try {
       const res = await fetch('http://localhost:5000/api/fraud/check', {
         headers: { 'x-pi-uid': user.uid }
