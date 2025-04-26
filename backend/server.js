@@ -1,58 +1,28 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import connectDB from './config.js';
+
 import authRoutes from './routes/authRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
 import fraudRoutes from './routes/fraudRoutes.js';
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './config.js';
-import express from 'express';
-import cors from 'cors';
-import fraudRoutes from './routes/fraud.js';
-import adminRoutes from './routes/admin.js';
+import adminRoutes from './routes/admin.js'; // if using Pi role middleware
 
+// Load .env and connect DB
+dotenv.config();
+connectDB();
+
+// Init app
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(fraudRoutes);
-app.use(adminRoutes);
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/transactions', transactionRoutes);
+app.use('/api/fraud', fraudRoutes);
+app.use('/api/admin', adminRoutes); // optional
 
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-import authRoutes from './routes/authRoutes.js';
-import transactionRoutes from './routes/transactionRoutes.js';
-import fraudRoutes from './routes/fraudRoutes.js';
-
-dotenv.config();
-connectDB();
-
-const app = express();
-app.use(express.json());
-
-app.use('/api/auth', authRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/fraud', fraudRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
-dotenv.config();
-connectDB();
-
-const app = express();
-app.use(express.json());
-
-app.use('/api/auth', authRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/fraud', fraudRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server runnin on ${PORT}`));
-require('dotenv').config();
-const express = require('express');
-const app = express();
-app.use(express.json());
-const authRoutes = require('./routes/authRoutes');
-app.use('/api/auth', authRoutes);
-app.listen(3000, () => console.log('Backend running on port 3000'));
