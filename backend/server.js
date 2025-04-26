@@ -6,7 +6,9 @@ import authRoutes from './routes/authRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
 import fraudRoutes from './routes/fraudRoutes.js';
 import adminRoutes from './routes/admin.js'; // if using Pi role middleware
-
+import User from './models/User.js';
+import Transaction from './models/Transaction.js';
+import FraudReport from './models/FraudReport.js';
 // Load .env and connect DB
 dotenv.config();
 connectDB();
