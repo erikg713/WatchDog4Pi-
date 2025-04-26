@@ -1,37 +1,67 @@
 import express from 'express';
-import { recordTransaction } from '../controllers/transactionController.js';
-import Transaction from './models/Transaction.js';
+import Transaction from '../models/Transaction.js';
 
-// Create a new transaction example
-const newTransaction = new Transaction({
-  user: userId, // Pass the user’s ObjectId
-  amount: 100.50,
-  paymentId: 'payment123',
-  txid: 'txid123',
-  status: 'completed',
-  vendor: 'ShopXYZ',
-});
-
-// Save it to the database
-await newTransaction.save();
 const router = express.Router();
 
-router.post('/', recordTransaction); // POST /api/transactions
+// Create a new transaction
+router.post('/', async (req, res) => {
+  const { user, amount, memo, paymentId, txid, vendor } = req.body;
+
+  try {
+    const newTransaction = new Transaction({
+      user,
+      amount,
+      memo,
+      paymentId,
+      txid,
+      vendor,
+    });
+
+    await newTransaction.save();
+    res.status(201).json(newTransaction);
+  } catch (err) {
+    res.status(500).json({ message: 'Error creating transaction', error: err });
+  }
+});
+
+// Get all transactions
+router.get('/', async (req, res) => {
+  try {
+    const transactions = await Transaction.find();
+    res.json(transactions);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching transactions', error: err });
+  }
+});
+
+// Get a single transaction by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const transaction = await Transaction.findById(req.params.id);
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transaction not found' });
+    }
+    res.json(transaction);
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching transaction', error: err });
+  }
+});
+
+// Update a transaction (e.g., flagging for fraud)
+router.put('/:id', async (req, res) => {
+  try {
+    const transaction = await Transaction.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body },
+      { new: true }
+    );
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transaction not found' });
+    }
+    res.json(transaction);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating transaction', error: err });
+  }
+});
 
 export default router;
-const express = require('express')
-const router = express.Router()
-const Transaction = require('../models/Transaction')
-
-router.post('/', async (req, res) => {
-  const { userId, amount, memo } = req.body
-  const tx = await Transaction.create({ user: userId, amount, memo })
-  res.json(tx)
-})
-
-router.get('/:id', async (req, res) => {
-  const tx = await Transaction.findById(req.params.id)
-  res.json(tx)
-})
-
-module.exports = router
