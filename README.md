@@ -1,5 +1,9 @@
-# WatchDog-PiGuard
-A utility app to protect Pi Network users from fraud and phishing, built with Pi SDK integration.
+PiGuard: Watchdog-4-Pi
+
+PiGuard is a full-stack utility designed to protect Pi Network users from fraud, scams, and phishing attacks. Built with the Pi SDK, it authenticates Pi users and actively flags suspicious behavior using customizable wordlists and fraud detection logic.
+
+---
+```bash
 npm install -g @vue/cli
 vue create frontend
 cd frontend
@@ -8,7 +12,7 @@ mkdir backend
 cd backend
 npm init -y
 npm install express mongoose pi-sdk
---
+---
 ## Top Level
 PiGuard/
 ├── frontend/        # Vue 3 App with Pi SDK UI
@@ -17,7 +21,7 @@ PiGuard/
 ├── .github/         # GitHub Actions (CI/CD workflows)
 ├── README.md        # Project overview and instructions
 └── LICENSE          # MIT or open-source license
---
+---
 ## frontend 
 frontend/
 ├── public/
@@ -43,9 +47,15 @@ frontend/
 │   └── tailwind.config.js
 ├── .env
 ├── package.json
-└── vite.config.js          # Or vue.config.js if Vue CLI
---
+└── vite.config.js          # Or vue.config.js if 
+
+---
+
+### Vue CLI ###
+
+
 ## backend
+```bash
 backend/
 ├── controllers/
 │   ├── authController.js       # Pi login/token verification
@@ -72,27 +82,37 @@ backend/
 ├── config.js                  # DB + Pi SDK setup
 ├── package.json
 └── README.md
---
-## Wordlists
+
+---
+
+## Wordlists ##
+```bash
 wordlists/                  # Custom scam keywords, fake domains, usernames, etc.
 ├── phishing_keywords.txt
 ├── scam_domains.txt
 └── flagged_users.txt
---
+
+---
+```bash
 .github/
 └── workflows/
     └── node.yml            # Auto deploy/test
---
+
+---
+
 ## Backend Dependencies ##
+```bash
 mkdir backend && cd backend
 npm init -y
 npm install express mongoose dotenv
 npm install nodemon --save-dev
---
 
-
+---
+```bash
 npm init vue@latest
 
+---
+```bash
 cd piguard-frontend
 npm install
 npm install -D tailwindcss postcss autoprefixer
