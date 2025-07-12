@@ -117,3 +117,20 @@ cd piguard-frontend
 npm install
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
+---
+
+⚡ Quick Start
+
+# Clone the repo
+git clone https://github.com/yourname/PiGuard.git
+cd PiGuard
+
+# Start backend
+cd backend
+npm install
+npm run dev
+
+# Start frontend
+cd ../frontend
+npm install
+npm run serve
