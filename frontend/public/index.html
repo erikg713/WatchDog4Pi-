@@ -1,29 +1,31 @@
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 <script>
   (async () => {
+    // Get user data from localStorage
     const user = JSON.parse(localStorage.getItem('pi_user'));
-    if (!user?.uid) {
-      console.error('Pi user not found in localStorage');
+
+    if (!user?.uid || !user?.accessToken) {
+      console.error('Pi user or accessToken not found in localStorage');
       return;
     }
-const user = JSON.parse(localStorage.getItem('pi_user'));
-const accessToken = user?.accessToken;
 
-const res = await fetch('http://localhost:5000/api/fraud/check', {
-  method: 'GET',
-  headers: {
-    'x-pi-uid': user?.uid,
-    'Authorization': `Bearer ${accessToken}`
-  }
-});
     try {
-      const res = await fetch('http://localhost:5000/api/fraud/check', {
-        headers: { 'x-pi-uid': user.uid }
+      const response = await fetch('http://localhost:5000/api/fraud/check', {
+        method: 'GET',
+        headers: {
+          'x-pi-uid': user.uid,
+          'Authorization': `Bearer ${user.accessToken}`
+        }
       });
-      const data = await res.json();
-      console.log('Fraud check result:', data);
+
+      if (!response.ok) {
+        throw new Error(`Server responded with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('✅ Fraud check result:', data);
     } catch (error) {
-      console.error('Error during fraud check:', error);
+      console.error('❌ Error during fraud check:', error.message);
     }
   })();
 </script>
