@@ -1,6 +1,6 @@
-PiGuard: Watchdog-4-Pi
+### Watchdog-4-Pi ###
 
-PiGuard is a full-stack utility designed to protect Pi Network users from fraud, scams, and phishing attacks. Built with the Pi SDK, it authenticates Pi users and actively flags suspicious behavior using customizable wordlists and fraud detection logic.
+Watchdog-4-Pi is a full-stack utility designed to protect Pi Network users from fraud, scams, and phishing attacks. Built with the Pi SDK, it authenticates Pi users and actively flags suspicious behavior using customizable wordlists and fraud detection logic.
 
 ---
 ```bash
@@ -14,7 +14,7 @@ npm init -y
 npm install express mongoose pi-sdk
 ---
 ## Top Level
-PiGuard/
+Watchdog-4-Pi/
 ├── frontend/        # Vue 3 App with Pi SDK UI
 ├── backend/         # Node.js API with Pi authentication, fraud logic
 ├── wordlists/       # Optional for fraud detection or pattern matching
@@ -113,7 +113,7 @@ npm init vue@latest
 
 ---
 ```bash
-cd piguard-frontend
+cd Watchdog-4-Pi-frontend
 npm install
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
