@@ -14,7 +14,39 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config.js';
 import transactionRoutes from './routes/transactionRoutes.js';
+// backend/server.js
 
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/authRoutes');
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+
+// Root health check
+app.get('/', (req, res) => {
+  res.send('Watchdog-4-Pi backend is running.');
+});
+
+// MongoDB connect
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('✅ MongoDB connected');
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}).catch(err => {
+  console.error('❌ DB connection error:', err.message);
+});
 dotenv.config();
 connectDB();
 
