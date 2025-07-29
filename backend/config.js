@@ -12,3 +12,17 @@ const connectDB = async () => {
 };
 
 export default connectDB;
+// backend/config.js
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+module.exports = {
+  port: process.env.PORT || 5000,
+  mongoURI: process.env.MONGO_URI,
+  pi: {
+    clientKey: process.env.PI_CLIENT_KEY,
+    serverKey: process.env.PI_SERVER_KEY,
+    appId: process.env.PI_APP_ID,
+  },
+};
