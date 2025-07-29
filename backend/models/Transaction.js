@@ -1,21 +1,36 @@
-import mongoose from 'mongoose';
+// backend/models/Transaction.js
 
-const transactionSchema = mongoose.Schema(
-  {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    amount: { type: Number, required: true },
-    memo: { type: String },
-    paymentId: { type: String, required: true },
-    txid: { type: String, required: true },
-    status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
-    isFlagged: { type: Boolean, default: false },
-    vendor: { type: String },
-    transactionDate: { type: Date, default: Date.now },
+const mongoose = require('mongoose');
+
+const transactionSchema = new mongoose.Schema({
+  senderUid: {
+    type: String,
+    required: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  receiverUid: {
+    type: String,
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+  purpose: {
+    type: String,
+    default: '',
+  },
+  isFlagged: {
+    type: Boolean,
+    default: false,
+  },
+  flaggedReason: {
+    type: String,
+    default: '',
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-const Transaction = mongoose.model('Transaction', transactionSchema);
-export default Transaction;
+module.exports = mongoose.model('Transaction', transactionSchema);
