@@ -39,3 +39,18 @@ onMounted(async () => {
   }
 });
 </script>
+
+// frontend/src/views/Dashboard.vue
+<template>
+  <div class="p-6">
+    <h1 class="text-2xl font-bold">Welcome to your Dashboard</h1>
+    <p v-if="userStore.verified" class="mt-2 text-green-600">Logged in as {{ userStore.username }}</p>
+    <p v-else class="mt-2 text-red-500">You are not authenticated.</p>
+  </div>
+</template>
+
+<script setup>
+import { useUserStore } from '@/store/user';
+const userStore = useUserStore();
+</script>
+
