@@ -15,3 +15,25 @@ const userSchema = mongoose.Schema(
 
 const User = mongoose.model('User', userSchema);
 export default User;
+
+// backend/models/User.js
+
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+  uid: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  username: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+module.exports = mongoose.model('User', userSchema);
