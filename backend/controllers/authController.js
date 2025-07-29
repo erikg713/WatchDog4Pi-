@@ -1,6 +1,6 @@
 // backend/controllers/authController.js
 
-const Pi = require('pi-sdk'); // Pi Network SDK
+const Pi = require('pi-sdk');
 const User = require('../models/User');
 require('dotenv').config();
 
@@ -11,8 +11,7 @@ const pi = new Pi({
 });
 
 /**
- * Verifies Pi user access token and logs user into the system.
- * Stores new users or updates existing user info.
+ * Verifies Pi user token and creates or updates user in DB.
  */
 const verifyToken = async (req, res) => {
   const { accessToken, uid } = req.body;
@@ -34,14 +33,18 @@ const verifyToken = async (req, res) => {
       user = new User({
         uid: userInfo.uid,
         username: userInfo.username,
-        createdAt: new Date(),
+        trustScore: 100,
+        flagged: false,
       });
-      await user.save();
+    } else {
+      user.username = userInfo.username;
     }
 
-    res.json({ message: 'User verified', user });
-  } catch (error) {
-    res.status(401).json({ error: 'Invalid Pi access token' });
+    await user.save();
+
+    res.status(200).json({ message: 'User verified', user });
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid Pi access token', detail: err.message });
   }
 };
 
