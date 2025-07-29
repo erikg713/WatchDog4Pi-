@@ -49,3 +49,48 @@ const verifyToken = async (req, res) => {
 };
 
 module.exports = { verifyToken };
+
+// backend/controllers/authController.js
+
+const { verifyAccessToken } = require('../services/piAuthService');
+const User = require('../models/User');
+
+/**
+ * POST /api/auth/verify
+ */
+const verifyToken = async (req, res) => {
+  const { accessToken, uid } = req.body;
+
+  if (!accessToken || !uid) {
+    return res.status(400).json({ error: 'Access token and UID required' });
+  }
+
+  try {
+    const userInfo = await verifyAccessToken(accessToken);
+
+    if (userInfo.uid !== uid) {
+      return res.status(401).json({ error: 'Token UID mismatch' });
+    }
+
+    let user = await User.findOne({ uid });
+
+    if (!user) {
+      user = new User({
+        uid,
+        username: userInfo.username,
+        trustScore: 100,
+        flagged: false,
+      });
+    } else {
+      user.username = userInfo.username;
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: 'User verified', user });
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid Pi token', detail: err.message });
+  }
+};
+
+module.exports = { verifyToken };
