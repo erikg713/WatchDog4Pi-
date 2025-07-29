@@ -1,30 +1,27 @@
-import fetch from 'node-fetch';
+// backend/middleware/verifyPiUser.js const { verifyAccessToken } = require('../services/piAuthService'); const User = require('../models/User');
 
-export default async function verifyPiUser(req, res, next) {
-  const uid = req.headers['x-pi-uid'];
-  const authHeader = req.headers['authorization'];
+/**
 
-  if (!uid || !authHeader?.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Missing credentials' });
-  }
+Middleware to verify Pi user before accessing protected routes */ const verifyPiUser = async (req, res, next) => { const { accessToken, uid } = req.body;
 
-  const accessToken = authHeader.split(' ')[1];
 
-  try {
-    const piRes = await fetch('https://api.minepi.com/v2/me', {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
+if (!accessToken || !uid) { return res.status(401).json({ error: 'Access token and UID required' }); }
 
-    const userData = await piRes.json();
+try { const userInfo = await verifyAccessToken(accessToken);
 
-    if (userData.uid !== uid) {
-      return res.status(403).json({ error: 'UID mismatch' });
-    }
-
-    req.piUser = userData; // Forward user info
-    next();
-  } catch (err) {
-    console.error('Pi auth failed:', err);
-    res.status(500).json({ error: 'Pi verification failed' });
-  }
+if (userInfo.uid !== uid) {
+  return res.status(403).json({ error: 'Token does not match UID' });
 }
+
+const user = await User.findOne({ uid });
+if (!user) {
+  return res.status(404).json({ error: 'User not found' });
+}
+
+req.user = user;
+next();
+
+} catch (err) { res.status(403).json({ error: 'Unauthorized', detail: err.message }); } };
+
+module.exports = verifyPiUser;
+
