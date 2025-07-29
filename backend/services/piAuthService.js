@@ -12,3 +12,30 @@ async function createPayment(userUid, amount, memo) {
   return paymentId
 }
 module.exports = { createPayment }
+
+// backend/services/piAuthService.js
+
+const Pi = require('pi-sdk');
+const config = require('../config');
+
+const pi = new Pi({
+  clientKey: config.pi.clientKey,
+  serverKey: config.pi.serverKey,
+  appId: config.pi.appId,
+});
+
+/**
+ * Verifies Pi user access token.
+ * @param {string} token - Pi user access token
+ * @returns {Promise<Object>} - Pi user info
+ */
+const verifyAccessToken = async (token) => {
+  try {
+    const userInfo = await pi.verifyAccessToken(token);
+    return userInfo;
+  } catch (err) {
+    throw new Error('Token verification failed: ' + err.message);
+  }
+};
+
+module.exports = { verifyAccessToken };
