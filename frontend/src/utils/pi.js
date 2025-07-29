@@ -35,3 +35,17 @@ export async function loginWithPi() {
     console.error('Pi auth error:', err);
   }
 }
+// frontend/src/utils/pi.js
+
+// Ensure Pi SDK is loaded in index.html or dynamically imported
+
+let Pi; if (typeof window !== 'undefined') { Pi = window.Pi; }
+
+const initPiLogin = async () => { if (!Pi) throw new Error('Pi SDK not found. Make sure it is loaded in your index.html');
+
+return new Promise((resolve, reject) => { Pi.authenticate(['username'], (error, auth) => { if (error) { reject(error); } else { resolve(auth); } }); }); };
+
+const getCurrentUser = () => { if (!Pi) return null; return Pi.getUser(); };
+
+export { initPiLogin, getCurrentUser };
+
