@@ -54,3 +54,27 @@ import { useUserStore } from '@/store/user';
 const userStore = useUserStore();
 </script>
 
+<script setup>
+import { ref } from 'vue';
+import FraudAlert from '@/components/FraudAlert.vue';
+import { getPiToken } from '@/utils/pi';
+
+const message = ref('');
+const flagged = ref(false);
+const reasons = ref([]);
+
+const scan = async () => {
+  const res = await fetch('/api/fraud/scan', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': await getPiToken(),
+    },
+    body: JSON.stringify({ message: message.value, userId: 'currentUserId' })
+  });
+
+  const data = await res.json();
+  flagged.value = data.flagged;
+  reasons.value = data.reasons || [];
+};
+</script>
