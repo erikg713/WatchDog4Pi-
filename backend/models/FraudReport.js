@@ -1,16 +1,18 @@
 import mongoose from 'mongoose';
 
-const fraudReportSchema = mongoose.Schema(
-  {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-    fraudScore: { type: Number, required: true },
-    reason: { type: String, required: true },
-    status: { type: String, enum: ['under_review', 'flagged', 'resolved'], default: 'under_review' },
+const FraudReportSchema = new mongoose.Schema({
+  reporter: { type: String, required: true },
+  suspect: { type: String, required: true },
+  reason: { type: String, required: true },
+  status: {
+    type: String,
+    enum: ['pending', 'reviewed', 'resolved'],
+    default: 'pending',
   },
-  {
-    timestamps: true,
-  }
-);
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-const FraudReport = mongoose.model('FraudReport', fraudReportSchema);
-export default FraudReport;
+export default mongoose.model('FraudReport', FraudReportSchema);
