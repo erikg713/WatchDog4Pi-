@@ -33,6 +33,19 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Error fetching transactions', error: err });
   }
 });
+import verifyPiToken from '../middleware/verifyPiToken.js';
+
+router.post('/', verifyPiToken, async (req, res) => {
+  // req.user is now populated
+  const { sender, receiver, amount, message } = req.body;
+  const tx = await Transaction.create({
+    sender,
+    receiver,
+    amount,
+    message,
+  });
+  res.status(201).json(tx);
+});
 
 // Get a single transaction by ID
 router.get('/:id', async (req, res) => {
