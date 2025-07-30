@@ -1,26 +1,27 @@
-import Transaction from '../models/Transaction.js';
+// controllers/fraudController.js
 
-export const checkFraud = async (req, res) => {
-  try {
-    const flagged = await Transaction.find({ isFlagged: true });
-    res.json({ count: flagged.length, flagged });
-  } catch (err) {
-    res.status(500).json({ error: 'Error checking fraud', details: err.message });
-  }
-};
-const ADMIN_UIDS = ['your_pi_uid_here'];
+const FraudService = require('../services/fraudDetection');
+const User = require('../models/User');
 
-export const checkFraud = async (req, res) => {
-  const requester = req.headers['x-pi-uid'];
+exports.scanMessage = async (req, res) => {
+  const { message, userId } = req.body;
 
-  if (!ADMIN_UIDS.includes(requester)) {
-    return res.status(403).json({ error: 'Unauthorized access' });
+  if (!message || !userId) {
+    return res.status(400).json({ error: 'Missing message or userId' });
   }
 
-  try {
-    const flagged = await Transaction.find({ isFlagged: true });
-    res.json({ count: flagged.length, flagged });
-  } catch (err) {
-    res.status(500).json({ error: 'Error checking fraud', details: err.message });
+  const { flagged, reasons } = await FraudService.analyze(message);
+
+  if (flagged) {
+    // optionally update user risk score
+    await User.findByIdAndUpdate(userId, { $inc: { fraudScore: 1 } });
+
+    return res.status(200).json({
+      flagged: true,
+      reasons,
+      message: 'Potential scam/fraud detected.'
+    });
   }
+
+  return res.status(200).json({ flagged: false, message: 'Clean' });
 };
