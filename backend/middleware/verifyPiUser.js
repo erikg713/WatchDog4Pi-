@@ -24,4 +24,20 @@ next();
 } catch (err) { res.status(403).json({ error: 'Unauthorized', detail: err.message }); } };
 
 module.exports = verifyPiUser;
+// middleware/verifyPiUser.js
+
+const piAuthService = require('../services/piAuthService');
+
+module.exports = async (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(401).json({ error: 'Missing Pi Auth Token' });
+
+  try {
+    const user = await piAuthService.verify(token);
+    req.user = user;
+    next();
+  } catch (err) {
+    res.status(403).json({ error: 'Invalid Pi user' });
+  }
+};
 
