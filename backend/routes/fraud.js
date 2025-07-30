@@ -1,6 +1,15 @@
 // backend/routes/fraud.js
 import express from 'express';
+// routes/fraudRoutes.js
 
+const express = require('express');
+const router = express.Router();
+const fraudController = require('../controllers/fraudController');
+const verifyPiUser = require('../middleware/verifyPiUser');
+
+router.post('/scan', verifyPiUser, fraudController.scanMessage);
+
+module.exports = router;
 const router = express.Router();
 
 router.get('/check', async (req, res) => {
